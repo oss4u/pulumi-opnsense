@@ -7,9 +7,9 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
 
-namespace Pulumi.Xyz
+namespace Pulumi.Opnsense
 {
-    [XyzResourceType("xyz:index:RandomComponent")]
+    [OpnsenseResourceType("opnsense:index:RandomComponent")]
     public partial class RandomComponent : global::Pulumi.ComponentResource
     {
         [Output("length")]
@@ -27,7 +27,7 @@ namespace Pulumi.Xyz
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
         public RandomComponent(string name, RandomComponentArgs args, ComponentResourceOptions? options = null)
-            : base("xyz:index:RandomComponent", name, args ?? new RandomComponentArgs(), MakeResourceOptions(options, ""), remote: true)
+            : base("opnsense:index:RandomComponent", name, args ?? new RandomComponentArgs(), MakeResourceOptions(options, ""), remote: true)
         {
         }
 

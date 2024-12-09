@@ -1,11 +1,11 @@
 {
-    "name": "@pulumi/xyz",
+    "name": "@pulumi/opnsense",
     "version": "${VERSION}",
     "scripts": {
         "build": "tsc"
     },
     "dependencies": {
-        "@pulumi/pulumi": "^3.42.0"
+        "@pulumi/pulumi": "^3.136.0"
     },
     "devDependencies": {
         "@types/node": "^14",
@@ -13,6 +13,6 @@
     },
     "pulumi": {
         "resource": true,
-        "name": "xyz"
+        "name": "opnsense"
     }
 }

@@ -1,10 +1,10 @@
-PROJECT_NAME := Pulumi Xyz Resource Provider
+PROJECT_NAME := Pulumi opnsense Resource Provider
 
-PACK             := xyz
+PACK             := opnsense
 PACKDIR          := sdk
-PROJECT          := github.com/pulumi/pulumi-xyz
-NODE_MODULE_NAME := @abc/xyz
-NUGET_PKG_NAME   := Abc.Xyz
+PROJECT          := github.com/oss4u/pulumi-opnsense
+NODE_MODULE_NAME := @oss4u/opnsense
+NUGET_PKG_NAME   := oss4u.opnsense
 
 PROVIDER        := pulumi-resource-${PACK}
 VERSION         ?= $(shell pulumictl get version)
@@ -24,9 +24,9 @@ prepare::
 	@if test -z "${NAME}"; then echo "NAME not set"; exit 1; fi
 	@if test -z "${REPOSITORY}"; then echo "REPOSITORY not set"; exit 1; fi
 	@if test -z "${ORG}"; then echo "ORG not set"; exit 1; fi
-	@if test ! -d "provider/cmd/pulumi-resource-xyz"; then "Project already prepared"; exit 1; fi # SED_SKIP
+	@if test ! -d "provider/cmd/pulumi-resource-opnsense"; then "Project already prepared"; exit 1; fi # SED_SKIP
 
-	mv "provider/cmd/pulumi-resource-xyz" provider/cmd/pulumi-resource-${NAME} # SED_SKIP
+	mv "provider/cmd/pulumi-resource-opnsense" provider/cmd/pulumi-resource-${NAME} # SED_SKIP
 
 	if [[ "${OS}" != "Darwin" ]]; then \
 		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '/SED_SKIP/!s,github.com/pulumi/pulumi-[x]yz,${REPOSITORY},g' {} \; &> /dev/null; \

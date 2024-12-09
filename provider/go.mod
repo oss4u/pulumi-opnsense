@@ -1,8 +1,6 @@
-module github.com/pulumi/pulumi-xyz/provider
+module github.com/oss4u/pulumi-opnsense/provider
 
 go 1.22
-
-toolchain go1.23.0
 
 require (
 	github.com/blang/semver v3.5.1+incompatible

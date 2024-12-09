@@ -1,17 +1,17 @@
-name: provider-xyz-native
+name: provider-opnsense-native
 runtime: yaml
 plugins:
   providers:
-    - name: xyz
+    - name: opnsense
       path: ../../bin
 
 resources:
   myRandomResource:
-    type: xyz:Random
+    type: opnsense:Random
     properties:
       length: 24
   myRandomComponent:
-    type: xyz:RandomComponent
+    type: opnsense:RandomComponent
     properties:
       length: 24
 
