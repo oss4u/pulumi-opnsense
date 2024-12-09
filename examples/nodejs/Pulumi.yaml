@@ -1,0 +1,6 @@
+name: provider-opnsense-native
+runtime: nodejs
+plugins:
+  providers:
+    - name: opnsense
+      path: ../../bin

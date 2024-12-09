@@ -1,0 +1,6 @@
+name: provider-opnsense-native
+runtime: dotnet
+plugins:
+  providers:
+    - name: opnsense
+      path: ../../bin

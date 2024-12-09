@@ -1,0 +1,6 @@
+name: provider-opnsense-native
+runtime: python
+plugins:
+  providers:
+    - name: opnsense
+      path: ../../bin

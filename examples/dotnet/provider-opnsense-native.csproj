@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Pulumi" Version="3.*" />
+		<PackageReference Include="Pulumi.Opnsense" Version="0.1.12-alpha.1733758077+1c927117.dirty" />
+	</ItemGroup>
+
+</Project>
