@@ -1,4 +1,4 @@
-name: Tag Version
+name: main
 on:
   push:
     branches:
@@ -6,6 +6,7 @@ on:
     tags:
       - '!v*.*.*'
       - '!v*.*.*-**'
+
 env:
   PROVIDER: "opnsense"
   GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
