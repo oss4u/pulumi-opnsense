@@ -1,11 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pulumi;
-using opnsense = Pulumi.opnsense;
+using Opnsense = Pulumi.Opnsense;
 
 return await Deployment.RunAsync(() => 
 {
-    var myRandomResource = new opnsense.Random("myRandomResource", new()
+    var myRandomResource = new Opnsense.Random("myRandomResource", new()
+    {
+        Length = 24,
+    });
+
+    var myRandomComponent = new Opnsense.RandomComponent("myRandomComponent", new()
     {
         Length = 24,
     });

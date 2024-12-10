@@ -5,10 +5,9 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Pulumi" Version="3.*" />
-		<PackageReference Include="Pulumi.opnsense" Version="0.0.1-alpha.1699945013+97b0e04c" />
+		<PackageReference Include="Pulumi.Opnsense" Version="0.1.12-alpha.1733758077+1c927117.dirty" />
 	</ItemGroup>
 
 </Project>

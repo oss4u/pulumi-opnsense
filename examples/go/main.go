@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/oss4u/pulumi-opnsense/sdk/go/opnsense"
+	"example.com/pulumi-opnsense/sdk/go/opnsense"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -13,7 +13,13 @@ func main() {
 		if err != nil {
 			return err
 		}
-		ctx.Export("output", map[string]interface{}{
+		_, err = opnsense.NewRandomComponent(ctx, "myRandomComponent", &opnsense.RandomComponentArgs{
+			Length: pulumi.Int(24),
+		})
+		if err != nil {
+			return err
+		}
+		ctx.Export("output", pulumi.StringMap{
 			"value": myRandomResource.Result,
 		})
 		return nil
