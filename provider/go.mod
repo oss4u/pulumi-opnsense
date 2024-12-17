@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	github.com/blang/semver v3.5.1+incompatible
+	github.com/oss4u/go-opnsense v0.2.2
 	github.com/pulumi/pulumi-go-provider v0.23.0
 	github.com/pulumi/pulumi-random/sdk/v4 v4.16.5
 	github.com/pulumi/pulumi/sdk/v3 v3.134.1
@@ -34,6 +35,7 @@ require (
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.5.0 // indirect
 	github.com/go-git/go-git/v5 v5.12.0 // indirect
+	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/gofrs/uuid v4.3.1+incompatible // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/glog v1.2.0 // indirect

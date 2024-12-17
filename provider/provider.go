@@ -15,6 +15,8 @@
 package provider
 
 import (
+	"github.com/oss4u/pulumi-opnsense/provider/core/config"
+	"github.com/oss4u/pulumi-opnsense/provider/core/unbound"
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/tokens"
@@ -30,12 +32,13 @@ func Provider() p.Provider {
 	// In this case, a single resource and component
 	return infer.Provider(infer.Options{
 		Resources: []infer.InferredResource{
-			infer.Resource[Random, RandomArgs, RandomState](),
+			infer.Resource[unbound.HostAliasOverride, unbound.HostAliasOverrideArgs, unbound.HostAliasOverrideState](),
+			infer.Resource[unbound.HostOverride, unbound.HostOverrideArgs, unbound.HostOverrideState](),
 		},
 		Components: []infer.InferredComponent{
 			infer.Component[*RandomComponent, RandomComponentArgs, *RandomComponentState](),
 		},
-		Config: infer.Config[Config](),
+		Config: infer.Config[config.Config](),
 		ModuleMap: map[tokens.ModuleName]tokens.ModuleName{
 			"provider": "index",
 		},

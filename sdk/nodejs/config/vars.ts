@@ -7,10 +7,35 @@ import * as utilities from "../utilities";
 declare var exports: any;
 const __config = new pulumi.Config("opnsense");
 
-export declare const itsasecret: boolean | undefined;
-Object.defineProperty(exports, "itsasecret", {
+/**
+ * The address of the fw. (without /api)
+ */
+export declare const address: string | undefined;
+Object.defineProperty(exports, "address", {
     get() {
-        return __config.getObject<boolean>("itsasecret");
+        return __config.get("address");
+    },
+    enumerable: true,
+});
+
+/**
+ * The key to access the api of the fw.
+ */
+export declare const key: string | undefined;
+Object.defineProperty(exports, "key", {
+    get() {
+        return __config.get("key");
+    },
+    enumerable: true,
+});
+
+/**
+ * The secret to access the api of the fw.
+ */
+export declare const secret: string | undefined;
+Object.defineProperty(exports, "secret", {
+    get() {
+        return __config.get("secret");
     },
     enumerable: true,
 });

@@ -13,13 +13,32 @@ namespace Pulumi.Opnsense
     public partial class Provider : global::Pulumi.ProviderResource
     {
         /// <summary>
+        /// The address of the fw. (without /api)
+        /// </summary>
+        [Output("address")]
+        public Output<string> Address { get; private set; } = null!;
+
+        /// <summary>
+        /// The key to access the api of the fw.
+        /// </summary>
+        [Output("key")]
+        public Output<string> Key { get; private set; } = null!;
+
+        /// <summary>
+        /// The secret to access the api of the fw.
+        /// </summary>
+        [Output("secret")]
+        public Output<string> Secret { get; private set; } = null!;
+
+
+        /// <summary>
         /// Create a Provider resource with the given unique name, arguments, and options.
         /// </summary>
         ///
         /// <param name="name">The unique name of the resource</param>
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
-        public Provider(string name, ProviderArgs? args = null, CustomResourceOptions? options = null)
+        public Provider(string name, ProviderArgs args, CustomResourceOptions? options = null)
             : base("opnsense", name, args ?? new ProviderArgs(), MakeResourceOptions(options, ""))
         {
         }
@@ -29,6 +48,12 @@ namespace Pulumi.Opnsense
             var defaultOptions = new CustomResourceOptions
             {
                 Version = Utilities.Version,
+                AdditionalSecretOutputs =
+                {
+                    "address",
+                    "key",
+                    "secret",
+                },
             };
             var merged = CustomResourceOptions.Merge(defaultOptions, options);
             // Override the ID if one was specified for consistency with other language SDKs.
@@ -39,8 +64,53 @@ namespace Pulumi.Opnsense
 
     public sealed class ProviderArgs : global::Pulumi.ResourceArgs
     {
-        [Input("itsasecret", json: true)]
-        public Input<bool>? Itsasecret { get; set; }
+        [Input("address", required: true)]
+        private Input<string>? _address;
+
+        /// <summary>
+        /// The address of the fw. (without /api)
+        /// </summary>
+        public Input<string>? Address
+        {
+            get => _address;
+            set
+            {
+                var emptySecret = Output.CreateSecret(0);
+                _address = Output.Tuple<Input<string>?, int>(value, emptySecret).Apply(t => t.Item1);
+            }
+        }
+
+        [Input("key", required: true)]
+        private Input<string>? _key;
+
+        /// <summary>
+        /// The key to access the api of the fw.
+        /// </summary>
+        public Input<string>? Key
+        {
+            get => _key;
+            set
+            {
+                var emptySecret = Output.CreateSecret(0);
+                _key = Output.Tuple<Input<string>?, int>(value, emptySecret).Apply(t => t.Item1);
+            }
+        }
+
+        [Input("secret", required: true)]
+        private Input<string>? _secret;
+
+        /// <summary>
+        /// The secret to access the api of the fw.
+        /// </summary>
+        public Input<string>? Secret
+        {
+            get => _secret;
+            set
+            {
+                var emptySecret = Output.CreateSecret(0);
+                _secret = Output.Tuple<Input<string>?, int>(value, emptySecret).Apply(t => t.Item1);
+            }
+        }
 
         public ProviderArgs()
         {

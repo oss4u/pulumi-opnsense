@@ -10,11 +10,6 @@ export type Provider = import("./provider").Provider;
 export const Provider: typeof import("./provider").Provider = null as any;
 utilities.lazyLoad(exports, ["Provider"], () => require("./provider"));
 
-export { RandomArgs } from "./random";
-export type Random = import("./random").Random;
-export const Random: typeof import("./random").Random = null as any;
-utilities.lazyLoad(exports, ["Random"], () => require("./random"));
-
 export { RandomComponentArgs } from "./randomComponent";
 export type RandomComponent = import("./randomComponent").RandomComponent;
 export const RandomComponent: typeof import("./randomComponent").RandomComponent = null as any;
@@ -23,17 +18,17 @@ utilities.lazyLoad(exports, ["RandomComponent"], () => require("./randomComponen
 
 // Export sub-modules:
 import * as config from "./config";
+import * as unbound from "./unbound";
 
 export {
     config,
+    unbound,
 };
 
 const _module = {
     version: utilities.getVersion(),
     construct: (name: string, type: string, urn: string): pulumi.Resource => {
         switch (type) {
-            case "opnsense:index:Random":
-                return new Random(name, <any>undefined, { urn })
             case "opnsense:index:RandomComponent":
                 return new RandomComponent(name, <any>undefined, { urn })
             default:

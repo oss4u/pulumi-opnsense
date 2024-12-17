@@ -5,15 +5,25 @@ plugins:
     - name: opnsense
       path: ../../bin
 
+config:
+    opnsense:address: "asdf"
+    opnsense:key: "key"
+    opnsense:secret: "secret"
+
 resources:
   myRandomResource:
-    type: opnsense:Random
+    type: opnsense:unbound:HostAliasOverride
     properties:
-      length: 24
-  myRandomComponent:
-    type: opnsense:RandomComponent
-    properties:
-      length: 24
+      description: "Pulumi test"
+      domain: "example.com"
+      enabled: true
+      host: "host"
+      hostname: "hostname"
+
+#  myRandomComponent:
+#    type: opnsense:RandomComponent
+#    properties:
+#      length: 24
 
 outputs:
   output:

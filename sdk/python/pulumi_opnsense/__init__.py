@@ -6,15 +6,17 @@ from . import _utilities
 import typing
 # Export this package's modules as members:
 from .provider import *
-from .random import *
 from .random_component import *
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
     import pulumi_opnsense.config as __config
     config = __config
+    import pulumi_opnsense.unbound as __unbound
+    unbound = __unbound
 else:
     config = _utilities.lazy_import('pulumi_opnsense.config')
+    unbound = _utilities.lazy_import('pulumi_opnsense.unbound')
 
 _utilities.register(
     resource_modules="""
@@ -24,8 +26,16 @@ _utilities.register(
   "mod": "index",
   "fqn": "pulumi_opnsense",
   "classes": {
-   "opnsense:index:Random": "Random",
    "opnsense:index:RandomComponent": "RandomComponent"
+  }
+ },
+ {
+  "pkg": "opnsense",
+  "mod": "unbound",
+  "fqn": "pulumi_opnsense.unbound",
+  "classes": {
+   "opnsense:unbound:HostAliasOverride": "HostAliasOverride",
+   "opnsense:unbound:HostOverride": "HostOverride"
   }
  }
 ]

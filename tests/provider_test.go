@@ -32,7 +32,7 @@ func TestRandomCreate(t *testing.T) {
 	prov := provider()
 
 	response, err := prov.Create(p.CreateRequest{
-		Urn: urn("Random"),
+		Urn: urn("HostOverride"),
 		Properties: resource.PropertyMap{
 			"length": resource.NewNumberProperty(12),
 		},

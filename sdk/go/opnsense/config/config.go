@@ -11,6 +11,17 @@ import (
 
 var _ = internal.GetEnvOrDefault
 
-func GetItsasecret(ctx *pulumi.Context) bool {
-	return config.GetBool(ctx, "opnsense:itsasecret")
+// The address of the fw. (without /api)
+func GetAddress(ctx *pulumi.Context) string {
+	return config.Get(ctx, "opnsense:address")
+}
+
+// The key to access the api of the fw.
+func GetKey(ctx *pulumi.Context) string {
+	return config.Get(ctx, "opnsense:key")
+}
+
+// The secret to access the api of the fw.
+func GetSecret(ctx *pulumi.Context) string {
+	return config.Get(ctx, "opnsense:secret")
 }

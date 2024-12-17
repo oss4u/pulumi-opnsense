@@ -19,6 +19,18 @@ export class Provider extends pulumi.ProviderResource {
         return obj['__pulumiType'] === "pulumi:providers:" + Provider.__pulumiType;
     }
 
+    /**
+     * The address of the fw. (without /api)
+     */
+    public readonly address!: pulumi.Output<string>;
+    /**
+     * The key to access the api of the fw.
+     */
+    public readonly key!: pulumi.Output<string>;
+    /**
+     * The secret to access the api of the fw.
+     */
+    public readonly secret!: pulumi.Output<string>;
 
     /**
      * Create a Provider resource with the given unique name, arguments, and options.
@@ -27,13 +39,26 @@ export class Provider extends pulumi.ProviderResource {
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args?: ProviderArgs, opts?: pulumi.ResourceOptions) {
+    constructor(name: string, args: ProviderArgs, opts?: pulumi.ResourceOptions) {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         {
-            resourceInputs["itsasecret"] = pulumi.output(args ? args.itsasecret : undefined).apply(JSON.stringify);
+            if ((!args || args.address === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'address'");
+            }
+            if ((!args || args.key === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'key'");
+            }
+            if ((!args || args.secret === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'secret'");
+            }
+            resourceInputs["address"] = args?.address ? pulumi.secret(args.address) : undefined;
+            resourceInputs["key"] = args?.key ? pulumi.secret(args.key) : undefined;
+            resourceInputs["secret"] = args?.secret ? pulumi.secret(args.secret) : undefined;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
+        const secretOpts = { additionalSecretOutputs: ["address", "key", "secret"] };
+        opts = pulumi.mergeOptions(opts, secretOpts);
         super(Provider.__pulumiType, name, resourceInputs, opts);
     }
 }
@@ -42,5 +67,16 @@ export class Provider extends pulumi.ProviderResource {
  * The set of arguments for constructing a Provider resource.
  */
 export interface ProviderArgs {
-    itsasecret?: pulumi.Input<boolean>;
+    /**
+     * The address of the fw. (without /api)
+     */
+    address: pulumi.Input<string>;
+    /**
+     * The key to access the api of the fw.
+     */
+    key: pulumi.Input<string>;
+    /**
+     * The secret to access the api of the fw.
+     */
+    secret: pulumi.Input<string>;
 }

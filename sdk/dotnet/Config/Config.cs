@@ -32,11 +32,34 @@ namespace Pulumi.Opnsense
 
         private static readonly global::Pulumi.Config __config = new global::Pulumi.Config("opnsense");
 
-        private static readonly __Value<bool?> _itsasecret = new __Value<bool?>(() => __config.GetBoolean("itsasecret"));
-        public static bool? Itsasecret
+        private static readonly __Value<string?> _address = new __Value<string?>(() => __config.Get("address"));
+        /// <summary>
+        /// The address of the fw. (without /api)
+        /// </summary>
+        public static string? Address
         {
-            get => _itsasecret.Get();
-            set => _itsasecret.Set(value);
+            get => _address.Get();
+            set => _address.Set(value);
+        }
+
+        private static readonly __Value<string?> _key = new __Value<string?>(() => __config.Get("key"));
+        /// <summary>
+        /// The key to access the api of the fw.
+        /// </summary>
+        public static string? Key
+        {
+            get => _key.Get();
+            set => _key.Set(value);
+        }
+
+        private static readonly __Value<string?> _secret = new __Value<string?>(() => __config.Get("secret"));
+        /// <summary>
+        /// The secret to access the api of the fw.
+        /// </summary>
+        public static string? Secret
+        {
+            get => _secret.Get();
+            set => _secret.Set(value);
         }
 
     }

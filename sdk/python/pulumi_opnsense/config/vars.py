@@ -21,6 +21,23 @@ __config__ = pulumi.Config('opnsense')
 
 class _ExportableConfig(types.ModuleType):
     @property
-    def itsasecret(self) -> Optional[bool]:
-        return __config__.get_bool('itsasecret')
+    def address(self) -> Optional[str]:
+        """
+        The address of the fw. (without /api)
+        """
+        return __config__.get('address')
+
+    @property
+    def key(self) -> Optional[str]:
+        """
+        The key to access the api of the fw.
+        """
+        return __config__.get('key')
+
+    @property
+    def secret(self) -> Optional[str]:
+        """
+        The secret to access the api of the fw.
+        """
+        return __config__.get('secret')
 

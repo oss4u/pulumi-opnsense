@@ -19,21 +19,54 @@ __all__ = ['ProviderArgs', 'Provider']
 @pulumi.input_type
 class ProviderArgs:
     def __init__(__self__, *,
-                 itsasecret: Optional[pulumi.Input[bool]] = None):
+                 address: pulumi.Input[str],
+                 key: pulumi.Input[str],
+                 secret: pulumi.Input[str]):
         """
         The set of arguments for constructing a Provider resource.
+        :param pulumi.Input[str] address: The address of the fw. (without /api)
+        :param pulumi.Input[str] key: The key to access the api of the fw.
+        :param pulumi.Input[str] secret: The secret to access the api of the fw.
         """
-        if itsasecret is not None:
-            pulumi.set(__self__, "itsasecret", itsasecret)
+        pulumi.set(__self__, "address", address)
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "secret", secret)
 
     @property
     @pulumi.getter
-    def itsasecret(self) -> Optional[pulumi.Input[bool]]:
-        return pulumi.get(self, "itsasecret")
+    def address(self) -> pulumi.Input[str]:
+        """
+        The address of the fw. (without /api)
+        """
+        return pulumi.get(self, "address")
 
-    @itsasecret.setter
-    def itsasecret(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "itsasecret", value)
+    @address.setter
+    def address(self, value: pulumi.Input[str]):
+        pulumi.set(self, "address", value)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        The key to access the api of the fw.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def secret(self) -> pulumi.Input[str]:
+        """
+        The secret to access the api of the fw.
+        """
+        return pulumi.get(self, "secret")
+
+    @secret.setter
+    def secret(self, value: pulumi.Input[str]):
+        pulumi.set(self, "secret", value)
 
 
 class Provider(pulumi.ProviderResource):
@@ -41,18 +74,23 @@ class Provider(pulumi.ProviderResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 itsasecret: Optional[pulumi.Input[bool]] = None,
+                 address: Optional[pulumi.Input[str]] = None,
+                 key: Optional[pulumi.Input[str]] = None,
+                 secret: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Create a Opnsense resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] address: The address of the fw. (without /api)
+        :param pulumi.Input[str] key: The key to access the api of the fw.
+        :param pulumi.Input[str] secret: The secret to access the api of the fw.
         """
         ...
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: Optional[ProviderArgs] = None,
+                 args: ProviderArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         Create a Opnsense resource with the given unique name, props, and options.
@@ -71,7 +109,9 @@ class Provider(pulumi.ProviderResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 itsasecret: Optional[pulumi.Input[bool]] = None,
+                 address: Optional[pulumi.Input[str]] = None,
+                 key: Optional[pulumi.Input[str]] = None,
+                 secret: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -81,10 +121,44 @@ class Provider(pulumi.ProviderResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = ProviderArgs.__new__(ProviderArgs)
 
-            __props__.__dict__["itsasecret"] = pulumi.Output.from_input(itsasecret).apply(pulumi.runtime.to_json) if itsasecret is not None else None
+            if address is None and not opts.urn:
+                raise TypeError("Missing required property 'address'")
+            __props__.__dict__["address"] = None if address is None else pulumi.Output.secret(address)
+            if key is None and not opts.urn:
+                raise TypeError("Missing required property 'key'")
+            __props__.__dict__["key"] = None if key is None else pulumi.Output.secret(key)
+            if secret is None and not opts.urn:
+                raise TypeError("Missing required property 'secret'")
+            __props__.__dict__["secret"] = None if secret is None else pulumi.Output.secret(secret)
+        secret_opts = pulumi.ResourceOptions(additional_secret_outputs=["address", "key", "secret"])
+        opts = pulumi.ResourceOptions.merge(opts, secret_opts)
         super(Provider, __self__).__init__(
             'opnsense',
             resource_name,
             __props__,
             opts)
+
+    @property
+    @pulumi.getter
+    def address(self) -> pulumi.Output[str]:
+        """
+        The address of the fw. (without /api)
+        """
+        return pulumi.get(self, "address")
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Output[str]:
+        """
+        The key to access the api of the fw.
+        """
+        return pulumi.get(self, "key")
+
+    @property
+    @pulumi.getter
+    def secret(self) -> pulumi.Output[str]:
+        """
+        The secret to access the api of the fw.
+        """
+        return pulumi.get(self, "secret")
 

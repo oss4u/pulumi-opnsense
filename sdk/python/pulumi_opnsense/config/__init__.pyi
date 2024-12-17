@@ -14,5 +14,18 @@ else:
     from typing_extensions import NotRequired, TypedDict, TypeAlias
 from .. import _utilities
 
-itsasecret: Optional[bool]
+address: Optional[str]
+"""
+The address of the fw. (without /api)
+"""
+
+key: Optional[str]
+"""
+The key to access the api of the fw.
+"""
+
+secret: Optional[str]
+"""
+The secret to access the api of the fw.
+"""
 
