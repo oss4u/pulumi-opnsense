@@ -1,4 +1,4 @@
-name: Makefile
+name: Build on Main and PR
 
 on:
   workflow_dispatch:
