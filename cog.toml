@@ -2,14 +2,14 @@ from_latest_tag = true
 ignore_merge_commits = true
 #generate_mono_repository_global_tag = true
 branch_whitelist = ["main"]
-#pre_bump_hooks = [
-#    "git tag v{{version}}",
-#    "git tag sdk/v{{version}}"
-#]
-#post_bump_hooks = [
-#    "git push --tags",
-#    "git push origin {{version}} --tags",
-#]
+pre_bump_hooks = [
+    "git tag v{{version}}",
+    "git tag sdk/v{{version}}"
+]
+post_bump_hooks = [
+    "git push --tags",
+    "git push origin {{version}} --tags",
+]
 
 [changelog]
 path = "CHANGELOG.md"
