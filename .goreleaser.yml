@@ -3,7 +3,7 @@ archives:
     name_template: '{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}'
 before:
   hooks:
-    - make build
+    - make gen
 builds:
   - binary: pulumi-resource-opnsense
     dir: provider
@@ -18,8 +18,7 @@ builds:
       - linux
     ldflags:
       # The line below MUST align with the module in current provider/go.mod
-      # - -X github.com/oss4u/pulumi-opnsense-native/provider/pkg/version.Version={{.Tag }}
-      - -X main.Version={{.Tag }}
+      - -X github.com/oss4u/pulumi-opnsense/provider/Version={{.Tag }}
     main: ./cmd/pulumi-resource-opnsense/
 changelog:
   skip: true

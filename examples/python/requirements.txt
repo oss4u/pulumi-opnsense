@@ -1,0 +1,2 @@
+pulumi-opnsense==0.1.12-alpha.1733758077+1c927117.dirty
+pulumi>=3.0.0,<4.0.0

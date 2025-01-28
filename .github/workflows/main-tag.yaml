@@ -1,0 +1,29 @@
+name: main
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '!v*.*.*'
+      - '!v*.*.*-**'
+env:
+  PROVIDER: "opnsense"
+  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    #    runs-on: self-hosted
+    name: version
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0
+      - name: Semver release
+        id: release
+        uses: cocogitto/cocogitto-action@v3.5
+        with:
+          release: true
+          git-user: 'version'
+          git-user-email: 'info@sys-int.de'
