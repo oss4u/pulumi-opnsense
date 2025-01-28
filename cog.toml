@@ -26,6 +26,7 @@ authors = [
 #echo "[Conventional commit check]"
 #cog check
 #"""
+
 # Or file path
 #[git_hooks.pre-push]
 #path = "hooks/pre-push.sh"
