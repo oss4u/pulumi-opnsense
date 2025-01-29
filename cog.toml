@@ -12,16 +12,6 @@ post_bump_hooks = [
     "git push origin {{version}} --tags",
 ]
 
-#pre_bump_hooks = [
-#    "git tag v{{version}}",
-#    "git tag sdk/v{{version}}"
-#]
-#post_bump_hooks = [
-#    "git push --tags",
-#    "git push origin {{version}} --tags",
-#]
-
-
 [changelog]
 path = "CHANGELOG.md"
 authors = [
