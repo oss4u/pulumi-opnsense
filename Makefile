@@ -92,19 +92,19 @@ test_provider::
 dotnet_sdk:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet)
 dotnet_sdk::
 	rm -rf sdk/dotnet
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language dotnet
+	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language dotnet
 	cd ${PACKDIR}/dotnet/&& \
 		echo "${DOTNET_VERSION}" >version.txt && \
 		dotnet build /p:Version=${DOTNET_VERSION}
 
 go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 	rm -rf sdk/go
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go
+	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go
 
 nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
 nodejs_sdk::
 	rm -rf sdk/nodejs
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
+	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
 	cd ${PACKDIR}/nodejs/ && \
 		yarn install && \
 		yarn run tsc && \
@@ -115,7 +115,7 @@ nodejs_sdk::
 python_sdk:: PYPI_VERSION := $(shell pulumictl get version --language python)
 python_sdk::
 	rm -rf sdk/python
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language python
+	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language python
 	cp README.md ${PACKDIR}/python/
 	cd ${PACKDIR}/python/ && \
 		python3 setup.py clean --all 2>/dev/null && \
@@ -131,7 +131,7 @@ gen_examples: gen_go_example \
 
 gen_%_example:
 	rm -rf ${WORKING_DIR}/examples/$*
-	pulumi convert \
+	$(PULUMI) convert \
 		--cwd ${WORKING_DIR}/examples/yaml \
 		--logtostderr \
 		--generate-only \
@@ -141,23 +141,23 @@ gen_%_example:
 
 define pulumi_login
     export PULUMI_CONFIG_PASSPHRASE=asdfqwerty1234; \
-    pulumi login --local;
+    $(PULUMI) login --local;
 endef
 
 up::
 	$(call pulumi_login) \
 	cd ${EXAMPLES_DIR} && \
-	pulumi stack init dev && \
-	pulumi stack select dev && \
-	pulumi config set name dev && \
-	pulumi up -y
+	$(PULUMI) stack init dev && \
+	$(PULUMI) stack select dev && \
+	$(PULUMI) config set name dev && \
+	$(PULUMI) up -y
 
 down::
 	$(call pulumi_login) \
 	cd ${EXAMPLES_DIR} && \
-	pulumi stack select dev && \
-	pulumi destroy -y && \
-	pulumi stack rm dev -y
+	$(PULUMI) stack select dev && \
+	$(PULUMI) destroy -y && \
+	$(PULUMI) stack rm dev -y
 
 devcontainer::
 	git submodule update --init --recursive .devcontainer
