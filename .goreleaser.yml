@@ -1,4 +1,4 @@
-version: 2
+version: 1
 archives:
   - id: archive
     name_template: '{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}'
