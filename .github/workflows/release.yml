@@ -548,13 +548,13 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         PYPI_PUBLISH_ARTIFACTS: all
-    - if: failure() && github.event_name == 'push'
-      name: Notify Slack
-      uses: 8398a7/action-slack@28ba43ae48961b90635b50953d216767a6bea486 # v3.16.2
-      with:
-        author_name: Failure in publishing SDK
-        fields: repo,commit,author,action
-        status: ${{ job.status }}
+    # - if: failure() && github.event_name == 'push'
+    #   name: Notify Slack
+    #   uses: 8398a7/action-slack@28ba43ae48961b90635b50953d216767a6bea486 # v3.16.2
+    #   with:
+    #     author_name: Failure in publishing SDK
+    #     fields: repo,commit,author,action
+    #     status: ${{ job.status }}
   # publish_java_sdk:
   #   runs-on: ubuntu-latest
   #   continue-on-error: true
