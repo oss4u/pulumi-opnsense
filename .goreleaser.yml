@@ -22,7 +22,7 @@ builds:
       - -X github.com/oss4u/pulumi-opnsense/provider/Version={{.Tag }}
     main: ./cmd/pulumi-resource-opnsense/
 changelog:
-  skip: true
+  disable: true
 release:
   disable: false
   prerelease: auto
