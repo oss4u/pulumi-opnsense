@@ -494,6 +494,7 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         PYPI_PUBLISH_ARTIFACTS: all
+        VERSION: ${{ steps.version.outputs.version }}
 
   # publish_java_sdk:
   #   runs-on: ubuntu-latest
