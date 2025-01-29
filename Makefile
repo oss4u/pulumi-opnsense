@@ -23,31 +23,26 @@ TESTPARALLELISM := 4
 OS    := $(shell uname)
 SHELL := /bin/bash
 
-prepare::
-	@if test -z "${NAME}"; then echo "NAME not set"; exit 1; fi
-	@if test -z "${REPOSITORY}"; then echo "REPOSITORY not set"; exit 1; fi
-	@if test -z "${ORG}"; then echo "ORG not set"; exit 1; fi
-	@if test ! -d "provider/cmd/pulumi-resource-xyz"; then "Project already prepared"; exit 1; fi # SED_SKIP
+# Override during CI using `make [TARGET] PROVIDER_VERSION=""` or by setting a PROVIDER_VERSION environment variable
+# Local & branch builds will just used this fixed default version unless specified
+PROVIDER_VERSION ?= 1.0.0-alpha.0+dev
+# Use this normalised version everywhere rather than the raw input to ensure consistency.
+VERSION_GENERIC = $(shell pulumictl convert-version --language generic --version "$(PROVIDER_VERSION)")
 
-	mv "provider/cmd/pulumi-resource-xyz" provider/cmd/pulumi-resource-${NAME} # SED_SKIP
+# Need to pick up locally pinned pulumi-langage-* plugins.
+export PULUMI_IGNORE_AMBIENT_PLUGINS = true
 
-	if [[ "${OS}" != "Darwin" ]]; then \
-		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '/SED_SKIP/!s,github.com/pulumi/pulumi-[x]yz,${REPOSITORY},g' {} \; &> /dev/null; \
-		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '/SED_SKIP/!s/[xX]yz/${NAME}/g' {} \; &> /dev/null; \
-		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '/SED_SKIP/!s/[aA]bc/${ORG}/g' {} \; &> /dev/null; \
-	fi
 
-	# In MacOS the -i parameter needs an empty string to execute in place.
-	if [[ "${OS}" == "Darwin" ]]; then \
-		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '' '/SED_SKIP/!s,github.com/pulumi/pulumi-[x]yz,${REPOSITORY},g' {} \; &> /dev/null; \
-		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '' '/SED_SKIP/!s/[xX]yz/${NAME}/g' {} \; &> /dev/null; \
-		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '' '/SED_SKIP/!s/[aA]bc/${ORG}/g' {} \; &> /dev/null; \
-	fi
+ensure:: tidy
 
-ensure::
-	cd provider && go mod tidy
+tidy: tidy_provider tidy_examples
 	cd sdk && go mod tidy
-	cd tests && go mod tidy
+
+tidy_examples:
+	cd examples && go mod tidy
+
+tidy_provider:
+	cd provider && go mod tidy
 
 $(SCHEMA_FILE): provider $(PULUMI)
 	$(PULUMI) package get-schema $(WORKING_DIR)/bin/${PROVIDER} | \
@@ -80,49 +75,38 @@ sdk/dotnet: $(SCHEMA_FILE)
 
 
 
-provider::
-	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
+.PHONY: provider
+provider:
+	cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION_GENERIC}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER)
 
-provider_debug::
-	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -gcflags="all=-N -l" -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
+.PHONY: provider_debug
+provider_debug:
+	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -gcflags="all=-N -l" -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION_GENERIC}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
 
-test_provider::
-	cd tests && go test -short -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM} ./...
+test_provider: tidy_provider
+	cd provider && go test -short -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM} -coverprofile="coverage.txt" ./...
 
-dotnet_sdk:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet)
-dotnet_sdk::
-	rm -rf sdk/dotnet
-	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language dotnet
+dotnet_sdk: sdk/dotnet
 	cd ${PACKDIR}/dotnet/&& \
-		echo "${DOTNET_VERSION}" >version.txt && \
-		dotnet build /p:Version=${DOTNET_VERSION}
+		echo "${VERSION_GENERIC}" > version.txt && \
+		dotnet build
 
-go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
-	rm -rf sdk/go
-	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go
+go_sdk:	sdk/go
 
-nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
-nodejs_sdk::
-	rm -rf sdk/nodejs
-	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
+nodejs_sdk: sdk/nodejs
 	cd ${PACKDIR}/nodejs/ && \
 		yarn install && \
-		yarn run tsc && \
-		cp ../../README.md ../../LICENSE package.json yarn.lock bin/ && \
-		sed -i.bak 's/$${VERSION}/$(VERSION)/g' bin/package.json && \
-		rm ./bin/package.json.bak
+		yarn run tsc
+	cp README.md LICENSE ${PACKDIR}/nodejs/package.json ${PACKDIR}/nodejs/yarn.lock ${PACKDIR}/nodejs/bin/
 
-python_sdk:: PYPI_VERSION := $(shell pulumictl get version --language python)
-python_sdk::
-	rm -rf sdk/python
-	$(PULUMI) package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language python
+python_sdk: sdk/python
 	cp README.md ${PACKDIR}/python/
 	cd ${PACKDIR}/python/ && \
-		python3 setup.py clean --all 2>/dev/null && \
 		rm -rf ./bin/ ../python.bin/ && cp -R . ../python.bin && mv ../python.bin ./bin && \
-		sed -i.bak -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "$(VERSION)"/g' ./bin/setup.py && \
-		rm ./bin/setup.py.bak && \
-		cd ./bin && python3 setup.py build sdist
+		python3 -m venv venv && \
+		./venv/bin/python -m pip install build && \
+		cd ./bin && \
+		../venv/bin/python -m build .
 
 gen_examples: gen_go_example \
 		gen_nodejs_example \
@@ -173,17 +157,16 @@ build_sdks: dotnet_sdk go_sdk nodejs_sdk python_sdk
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build
 
-lint::
-	for DIR in "provider" "sdk" "tests" ; do \
-		pushd $$DIR && golangci-lint run -c ../.golangci.yml --timeout 10m && popd ; \
-	done
+lint:
+	cd provider && golangci-lint --path-prefix provider --config ../.golangci.yml run
 
 install:: install_nodejs_sdk install_dotnet_sdk
 	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
 
 GO_TEST 	 := go test -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM}
 
-test_all:: test_provider
+test_all:: test
+	cd provider/pkg && $(GO_TEST) ./...
 	cd tests/sdk/nodejs && $(GO_TEST) ./...
 	cd tests/sdk/python && $(GO_TEST) ./...
 	cd tests/sdk/dotnet && $(GO_TEST) ./...
