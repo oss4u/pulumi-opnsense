@@ -28,4 +28,4 @@ release:
   disable: false
   prerelease: auto
 snapshot:
-  version_template: '{{ .Tag }}-SNAPSHOT'
+  name_template: '{{ .Tag }}-SNAPSHOT'
