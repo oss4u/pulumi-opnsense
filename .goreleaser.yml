@@ -4,7 +4,7 @@ archives:
     name_template: '{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}'
 before:
   hooks:
-    - make build
+    - make codegen
 builds:
   - binary: pulumi-resource-opnsense
     dir: provider
