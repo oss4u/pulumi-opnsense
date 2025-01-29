@@ -96,14 +96,15 @@ jobs:
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
       - name: Check worktree clean
-        run: |
-          git update-index -q --refresh
-          if ! git diff-files --quiet; then
-              >&2 echo "error: working tree is not clean, aborting!"
-              git status
-              git diff
-              exit 1
-          fi
+        id: worktreeClean
+        uses: pulumi/git-status-check-action@54000b91124a8dd9fd6a872cb41f5dd246a46e7c # v1.1.1
+        with:
+          allowed-changes: |-
+            sdk/**/pulumi-plugin.json
+            sdk/dotnet/Pulumi.*.csproj
+            sdk/go/**/pulumiUtilities.go
+            sdk/nodejs/package.json
+            sdk/python/pyproject.toml
       - name: Compress SDK folder
         run: tar -zcf sdk/${{ matrix.language }}.tar.gz -C sdk/${{ matrix.language }} .
       - name: Upload artifacts
