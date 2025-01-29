@@ -9,6 +9,7 @@ builds:
   - binary: pulumi-resource-opnsense
     dir: provider
     env:
+      - GO111MODULE=on
       - CGO_ENABLED=0
     goarch:
       - amd64
