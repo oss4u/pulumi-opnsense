@@ -46,6 +46,26 @@ ensure::
 	cd sdk && go mod tidy
 	cd tests && go mod tidy
 
+codegen: $(SCHEMA_FILE) sdk/dotnet sdk/go sdk/nodejs sdk/python 
+
+.PHONY: sdk/%
+sdk/%: $(SCHEMA_FILE)
+	rm -rf $@
+	$(PULUMI) package gen-sdk --language $* $(SCHEMA_FILE) --version "${VERSION_GENERIC}"
+
+sdk/python: $(SCHEMA_FILE)
+	rm -rf $@
+	$(PULUMI) package gen-sdk --language python $(SCHEMA_FILE) --version "${VERSION_GENERIC}"
+	cp README.md ${PACKDIR}/python/
+
+sdk/dotnet: $(SCHEMA_FILE)
+	rm -rf $@
+	$(PULUMI) package gen-sdk --language dotnet $(SCHEMA_FILE) --version "${VERSION_GENERIC}"
+	# Copy the logo to the dotnet directory before building so it can be included in the nuget package archive.
+	# https://github.com/pulumi/pulumi-command/issues/243
+	cd ${PACKDIR}/dotnet/&& \
+		cp $(WORKING_DIR)/assets/logo.png logo.png
+
 provider::
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
 
