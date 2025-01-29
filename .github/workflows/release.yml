@@ -50,13 +50,13 @@ jobs:
     - name: Run GoReleaser
       uses: goreleaser/goreleaser-action@v2
       with:
-        args: -p 3 release --clean
+        args: -p 3 release --rm-dist
         version: latest
     strategy:
       fail-fast: true
       matrix:
         goversion:
-        - 1.22.x
+        - 1.17.x
   publish_sdk:
     name: Publish SDKs
     runs-on: ubuntu-latest
@@ -89,8 +89,6 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{matrix.pythonversion}}
-      - name: Build Provider
-        run: make build
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
       - name: Check worktree clean
@@ -105,7 +103,7 @@ jobs:
       - name: Compress SDK folder
         run: tar -zcf sdk/${{ matrix.language }}.tar.gz -C sdk/${{ matrix.language }} .
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4.6.0
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.language  }}-sdk.tar.gz
           path: ${{ github.workspace}}/sdk/${{ matrix.language }}.tar.gz

@@ -11,6 +11,9 @@ VERSION         ?= $(shell pulumictl get version)
 PROVIDER_PATH   := provider
 VERSION_PATH    := ${PROVIDER_PATH}.Version
 
+PULUMI          := .pulumi/bin/pulumi
+
+SCHEMA_FILE     := provider/cmd/pulumi-resource-opnsense/schema.json
 GOPATH			:= $(shell go env GOPATH)
 
 WORKING_DIR     := $(shell pwd)
@@ -24,9 +27,9 @@ prepare::
 	@if test -z "${NAME}"; then echo "NAME not set"; exit 1; fi
 	@if test -z "${REPOSITORY}"; then echo "REPOSITORY not set"; exit 1; fi
 	@if test -z "${ORG}"; then echo "ORG not set"; exit 1; fi
-	@if test ! -d "provider/cmd/pulumi-resource-opnsense"; then "Project already prepared"; exit 1; fi # SED_SKIP
+	@if test ! -d "provider/cmd/pulumi-resource-xyz"; then "Project already prepared"; exit 1; fi # SED_SKIP
 
-	mv "provider/cmd/pulumi-resource-opnsense" provider/cmd/pulumi-resource-${NAME} # SED_SKIP
+	mv "provider/cmd/pulumi-resource-xyz" provider/cmd/pulumi-resource-${NAME} # SED_SKIP
 
 	if [[ "${OS}" != "Darwin" ]]; then \
 		find . \( -path './.git' -o -path './sdk' \) -prune -o -not -name 'go.sum' -type f -exec sed -i '/SED_SKIP/!s,github.com/pulumi/pulumi-[x]yz,${REPOSITORY},g' {} \; &> /dev/null; \
@@ -46,6 +49,14 @@ ensure::
 	cd sdk && go mod tidy
 	cd tests && go mod tidy
 
+$(SCHEMA_FILE): provider $(PULUMI)
+	$(PULUMI) package get-schema $(WORKING_DIR)/bin/${PROVIDER} | \
+		jq 'del(.version)' > $(SCHEMA_FILE)
+
+# Codegen generates the schema file and *generates* all sdks. This is a local process and
+# does not require the ability to build all SDKs.
+#
+# To build the SDKs, use `make build_sdks`
 codegen: $(SCHEMA_FILE) sdk/dotnet sdk/go sdk/nodejs sdk/python 
 
 .PHONY: sdk/%
@@ -65,6 +76,9 @@ sdk/dotnet: $(SCHEMA_FILE)
 	# https://github.com/pulumi/pulumi-command/issues/243
 	cd ${PACKDIR}/dotnet/&& \
 		cp $(WORKING_DIR)/assets/logo.png logo.png
+
+
+
 
 provider::
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
@@ -151,8 +165,10 @@ devcontainer::
 	cp -f .devcontainer/devcontainer.json .devcontainer.json
 
 .PHONY: build
+build:: provider build_sdks
 
-build:: provider dotnet_sdk go_sdk nodejs_sdk python_sdk
+.PHONY: build_sdks
+build_sdks: dotnet_sdk go_sdk nodejs_sdk python_sdk 
 
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build
@@ -187,3 +203,18 @@ install_go_sdk::
 install_nodejs_sdk::
 	-yarn unlink --cwd $(WORKING_DIR)/sdk/nodejs/bin
 	yarn link --cwd $(WORKING_DIR)/sdk/nodejs/bin
+
+
+$(PULUMI): HOME := $(WORKING_DIR)
+$(PULUMI): provider/go.mod
+	@ PULUMI_VERSION="$$(cd provider && go list -m github.com/pulumi/pulumi/pkg/v3 | awk '{print $$2}')"; \
+	if [ -x $(PULUMI) ]; then \
+		CURRENT_VERSION="$$($(PULUMI) version)"; \
+		if [ "$${CURRENT_VERSION}" != "$${PULUMI_VERSION}" ]; then \
+			echo "Upgrading $(PULUMI) from $${CURRENT_VERSION} to $${PULUMI_VERSION}"; \
+			rm $(PULUMI); \
+		fi; \
+	fi; \
+	if ! [ -x $(PULUMI) ]; then \
+		curl -fsSL https://get.pulumi.com | sh -s -- --version "$${PULUMI_VERSION#v}"; \
+	fi
