@@ -57,7 +57,6 @@ codegen: $(SCHEMA_FILE) sdk/dotnet sdk/go sdk/nodejs sdk/python
 .PHONY: sdk/%
 sdk/%: $(SCHEMA_FILE)
 	rm -rf $@
-	echo "$@ - ${VERSION_GENERIC}" 
 	$(PULUMI) package gen-sdk --language $* $(SCHEMA_FILE) --version "${VERSION_GENERIC}"
 
 sdk/python: $(SCHEMA_FILE)
@@ -78,7 +77,6 @@ sdk/dotnet: $(SCHEMA_FILE)
 
 .PHONY: provider
 provider:
-	echo ">>> ${PROJECT}/${VERSION_PATH}=${VERSION_GENERIC}"
 	cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION_GENERIC}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER)
 
 .PHONY: provider_debug
