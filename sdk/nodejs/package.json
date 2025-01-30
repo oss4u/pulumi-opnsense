@@ -1,6 +1,13 @@
 {
     "name": "@pulumi/opnsense",
-    "version": "${VERSION}",
+    "version": "1.0.0-alpha.0+dev",
+    "keywords": [
+        "pulumi",
+        "opnsense"
+    ],
+    "homepage": "https://github.com/oss4u/pulumi-opnsense",
+    "repository": "https://github.com/oss4u/pulumi-opnsense",
+    "license": "Apache-2.0",
     "scripts": {
         "build": "tsc"
     },
@@ -13,6 +20,7 @@
     },
     "pulumi": {
         "resource": true,
-        "name": "opnsense"
+        "name": "opnsense",
+        "version": "1.0.0-alpha.0+dev"
     }
 }

@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+
 	"github.com/oss4u/go-opnsense/opnsense"
 	"github.com/pulumi/pulumi-go-provider/infer"
 )
@@ -10,7 +11,7 @@ type Config struct {
 	Address string `pulumi:"address" provider:"secret"`
 	Key     string `pulumi:"key" provider:"secret"`
 	Secret  string `pulumi:"secret" provider:"secret"`
-	//	Version           string `pulumi:"version"`
+	// Version string `pulumi:"version"`
 	//  PluginDownloadURL string `pulumi:"pluginDownloadURL"`
 	Api *opnsense.OpnSenseApi
 }

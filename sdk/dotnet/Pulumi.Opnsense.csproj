@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Pulumi Corp.</Authors>
-    <Company>Pulumi Corp.</Company>
-    <Description></Description>
-    <PackageLicenseExpression></PackageLicenseExpression>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <Authors>oss4u</Authors>
+    <Company>oss4u</Company>
+    <Description>The Pulumi OpnSense provider is used to interact with the resources supported by OpnSense.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/oss4u/pulumi-opnsense</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/oss4u/pulumi-opnsense</RepositoryUrl>
     <PackageIcon>logo.png</PackageIcon>
+    <Version>1.0.0-alpha.0+dev</Version>
 
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -44,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pulumi" Version="[3.66.1.0,4)" />
+    <PackageReference Include="Pulumi" Version="3.*" />
   </ItemGroup>
 
   <ItemGroup>

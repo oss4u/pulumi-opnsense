@@ -19,6 +19,7 @@ import (
 	"github.com/oss4u/pulumi-opnsense/provider/core/unbound"
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
+	"github.com/pulumi/pulumi-go-provider/middleware/schema"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/tokens"
 )
 
@@ -31,6 +32,37 @@ func Provider() p.Provider {
 	// We tell the provider what resources it needs to support.
 	// In this case, a single resource and component
 	return infer.Provider(infer.Options{
+		Metadata: schema.Metadata{
+			DisplayName: "OpnSense",
+			Description: "The Pulumi OpnSense provider is used to interact with the resources supported by OpnSense.",
+			Keywords:    []string{"pulumi", "opnsense"},
+			Homepage:    "https://github.com/oss4u/pulumi-opnsense",
+			License:     "Apache-2.0",
+			Repository:  "https://github.com/oss4u/pulumi-opnsense",
+			Publisher:   "oss4u",
+			LanguageMap: map[string]any{
+				"csharp": map[string]any{
+					"respectSchemaVersion": true,
+					"packageReferences": map[string]string{
+						"Pulumi": "3.*",
+					},
+				},
+				"go": map[string]any{
+					"respectSchemaVersion":           true,
+					"generateResourceContainerTypes": true,
+					"importBasePath":                 "github.com/oss4u/pulumi-opnsense/sdk/go/oensense",
+				},
+				"nodejs": map[string]any{
+					"respectSchemaVersion": true,
+				},
+				"python": map[string]any{
+					"respectSchemaVersion": true,
+					"pyproject": map[string]bool{
+						"enabled": true,
+					},
+				},
+			},
+		},
 		Resources: []infer.InferredResource{
 			infer.Resource[unbound.HostAliasOverride, unbound.HostAliasOverrideArgs, unbound.HostAliasOverrideState](),
 			infer.Resource[unbound.HostOverride, unbound.HostOverrideArgs, unbound.HostOverrideState](),

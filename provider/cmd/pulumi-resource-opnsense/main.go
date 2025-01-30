@@ -15,10 +15,15 @@
 package main
 
 import (
+	"strings"
+
 	p "github.com/pulumi/pulumi-go-provider"
 
 	opnsense "github.com/oss4u/pulumi-opnsense/provider"
 )
 
 // Serve the provider against Pulumi's Provider protocol.
-func main() { p.RunProvider(opnsense.Name, opnsense.Version, opnsense.Provider()) }
+func main() {
+	version := strings.TrimPrefix(opnsense.Version, "v")
+	p.RunProvider(opnsense.Name, version, opnsense.Provider())
+}

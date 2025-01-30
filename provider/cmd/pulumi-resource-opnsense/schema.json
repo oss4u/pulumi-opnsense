@@ -1,7 +1,39 @@
 {
   "name": "opnsense",
+  "displayName": "OpnSense",
+  "description": "The Pulumi OpnSense provider is used to interact with the resources supported by OpnSense.",
+  "keywords": [
+    "pulumi",
+    "opnsense"
+  ],
+  "homepage": "https://github.com/oss4u/pulumi-opnsense",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/oss4u/pulumi-opnsense",
+  "publisher": "oss4u",
   "meta": {
     "moduleFormat": "(.*)"
+  },
+  "language": {
+    "csharp": {
+      "packageReferences": {
+        "Pulumi": "3.*"
+      },
+      "respectSchemaVersion": true
+    },
+    "go": {
+      "generateResourceContainerTypes": true,
+      "importBasePath": "github.com/oss4u/pulumi-opnsense/sdk/go/oensense",
+      "respectSchemaVersion": true
+    },
+    "nodejs": {
+      "respectSchemaVersion": true
+    },
+    "python": {
+      "pyproject": {
+        "enabled": true
+      },
+      "respectSchemaVersion": true
+    }
   },
   "config": {
     "variables": {
