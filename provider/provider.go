@@ -54,6 +54,7 @@ func Provider() p.Provider {
 				},
 				"nodejs": map[string]any{
 					"respectSchemaVersion": true,
+					"packageName":          "@oss4u/opnsense",
 				},
 				"python": map[string]any{
 					"respectSchemaVersion": true,

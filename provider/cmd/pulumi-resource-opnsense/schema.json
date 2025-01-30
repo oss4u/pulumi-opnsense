@@ -26,6 +26,7 @@
       "respectSchemaVersion": true
     },
     "nodejs": {
+      "packageName": "@oss4u/opnsense",
       "respectSchemaVersion": true
     },
     "python": {
