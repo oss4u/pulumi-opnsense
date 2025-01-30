@@ -569,7 +569,7 @@ jobs:
         path: ${{ github.workspace }}/sdk/
     - name: Uncompress go SDK
       run: |
-        ls -l ${{github.workspace}}/sdk/
+        mkdir -p ${{github.workspace}}/sdk/go
         tar -zxf ${{github.workspace}}/sdk/go.tar.gz -C ${{github.workspace}}/sdk/go
     - name: Publish Go SDK
       uses: pulumi/publish-go-sdk-action@v1
