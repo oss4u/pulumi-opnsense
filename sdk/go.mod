@@ -1,4 +1,4 @@
-module github.com/pulumi/pulumi-opnsense/sdk
+module github.com/oss4u/pulumi-opnsense/sdk
 
 go 1.21
 
