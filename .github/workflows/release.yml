@@ -563,12 +563,12 @@ jobs:
       with:
         set-env: PROVIDER_VERSION
     - name: Download go SDK
-      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      uses: actions/download-artifact@v4.1.8
       with:
         name: go-sdk.tar.gz
         path: ${{ github.workspace}}/sdk/
     - name: Uncompress go SDK
-      run: tar -zxf ${{github.workspace}}/sdk/go.tar.gz -C
+      run: tar -zxf ${{github.workspace}}/sdk/go-sdk.tar.gz -C
         ${{github.workspace}}/sdk/go
     - name: Publish Go SDK
       uses: pulumi/publish-go-sdk-action@v1
