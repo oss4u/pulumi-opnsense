@@ -566,10 +566,11 @@ jobs:
       uses: actions/download-artifact@v4.1.8
       with:
         name: go-sdk.tar.gz
-        path: ${{ github.workspace}}/sdk/
+        path: ${{ github.workspace }}/sdk/
     - name: Uncompress go SDK
-      run: tar -zxf ${{github.workspace}}/sdk/go-sdk.tar.gz -C
-        ${{github.workspace}}/sdk/go
+      run: |
+        ls -l ${{github.workspace}}/sdk/
+        tar -zxf ${{github.workspace}}/sdk/go-sdk.tar.gz -C ${{github.workspace}}/sdk/go
     - name: Publish Go SDK
       uses: pulumi/publish-go-sdk-action@v1
       with:
