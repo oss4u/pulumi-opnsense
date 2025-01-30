@@ -39,7 +39,7 @@ env:
   #   secrets.AZURE_SIGNING_CLIENT_SECRET == '' && secrets.AZURE_SIGNING_TENANT_ID
   #   == '' && secrets.AZURE_SIGNING_KEY_VAULT_URI == '' }}
   SKIP_SIGNING: true
-  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  #PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
   PULUMI_LOCAL_NUGET: ${{ github.workspace }}/nuget
   TRAVIS_OS_NAME: linux
   PULUMI_GO_DEP_ROOT: ${{ github.workspace }}/..
@@ -145,10 +145,10 @@ jobs:
         path: ${{ github.workspace }}/bin/provider.tar.gz
     # - name: Test Provider Library
     #   run: make test_provider
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    # - name: Upload coverage reports to Codecov
+    #   uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
+    #   env:
+    #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   build_sdks:
     needs: prerequisites
