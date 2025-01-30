@@ -430,7 +430,7 @@ jobs:
         lfs: true
     - id: version
       name: Set Provider Version
-      uses: pulumi/provider-version-action@f96d032a2758fdda7939e5728eff6c0d980ae894 # v1.6.0
+      uses: pulumi/provider-version-action@v1.6.0
       with:
         set-env: PROVIDER_VERSION
     - name: Checkout Scripts Repo
