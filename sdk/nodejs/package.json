@@ -21,6 +21,7 @@
     "pulumi": {
         "resource": true,
         "name": "opnsense",
-        "version": "1.0.0-alpha.0+dev"
+        "version": "1.0.0-alpha.0+dev",
+        "server": "github://api.github.com/oss4u/pulumi-opnsense"
     }
 }

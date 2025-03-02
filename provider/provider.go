@@ -33,13 +33,14 @@ func Provider() p.Provider {
 	// In this case, a single resource and component
 	return infer.Provider(infer.Options{
 		Metadata: schema.Metadata{
-			DisplayName: "OpnSense",
-			Description: "The Pulumi OpnSense provider is used to interact with the resources supported by OpnSense.",
-			Keywords:    []string{"pulumi", "opnsense"},
-			Homepage:    "https://github.com/oss4u/pulumi-opnsense",
-			License:     "Apache-2.0",
-			Repository:  "https://github.com/oss4u/pulumi-opnsense",
-			Publisher:   "oss4u",
+			DisplayName:       "OpnSense",
+			Description:       "The Pulumi OpnSense provider is used to interact with the resources supported by OpnSense.",
+			Keywords:          []string{"pulumi", "opnsense"},
+			Homepage:          "https://github.com/oss4u/pulumi-opnsense",
+			License:           "Apache-2.0",
+			Repository:        "https://github.com/oss4u/pulumi-opnsense",
+			Publisher:         "oss4u",
+			PluginDownloadURL: "github://api.github.com/oss4u/pulumi-opnsense",
 			LanguageMap: map[string]any{
 				"csharp": map[string]any{
 					"respectSchemaVersion": true,

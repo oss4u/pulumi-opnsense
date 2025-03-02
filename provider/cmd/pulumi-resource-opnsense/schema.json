@@ -9,6 +9,7 @@
   "homepage": "https://github.com/oss4u/pulumi-opnsense",
   "license": "Apache-2.0",
   "repository": "https://github.com/oss4u/pulumi-opnsense",
+  "pluginDownloadURL": "github://api.github.com/oss4u/pulumi-opnsense",
   "publisher": "oss4u",
   "meta": {
     "moduleFormat": "(.*)"
