@@ -48,6 +48,7 @@ namespace Pulumi.Opnsense
             var defaultOptions = new CustomResourceOptions
             {
                 Version = Utilities.Version,
+                PluginDownloadURL = "github://api.github.com/oss4u/pulumi-opnsense",
                 AdditionalSecretOutputs =
                 {
                     "address",
