@@ -20,7 +20,7 @@ builds:
       - linux
     ldflags:
       # The line below MUST align with the module in current provider/go.mod
-      - -X github.com/oss4u/pulumi-opnsense/provider/Version={{.Tag }}
+      - -X github.com/oss4u/pulumi-opnsense/provider.Version={{.Tag }}
     main: ./cmd/pulumi-resource-opnsense/
 changelog:
   disable: true
