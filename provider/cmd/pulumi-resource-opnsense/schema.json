@@ -108,30 +108,6 @@
     ]
   },
   "resources": {
-    "opnsense:index:RandomComponent": {
-      "properties": {
-        "length": {
-          "type": "integer"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "required": [
-        "length",
-        "password"
-      ],
-      "inputProperties": {
-        "length": {
-          "type": "integer"
-        }
-      },
-      "requiredInputs": [
-        "length"
-      ],
-      "isComponent": true
-    },
     "opnsense:unbound:HostAliasOverride": {
       "properties": {
         "description": {

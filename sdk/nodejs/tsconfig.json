@@ -17,7 +17,6 @@
         "config/vars.ts",
         "index.ts",
         "provider.ts",
-        "randomComponent.ts",
         "unbound/hostAliasOverride.ts",
         "unbound/hostOverride.ts",
         "unbound/index.ts",

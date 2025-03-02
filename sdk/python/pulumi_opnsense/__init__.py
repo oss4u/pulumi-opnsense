@@ -6,7 +6,6 @@ from . import _utilities
 import typing
 # Export this package's modules as members:
 from .provider import *
-from .random_component import *
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
@@ -21,14 +20,6 @@ else:
 _utilities.register(
     resource_modules="""
 [
- {
-  "pkg": "opnsense",
-  "mod": "index",
-  "fqn": "pulumi_opnsense",
-  "classes": {
-   "opnsense:index:RandomComponent": "RandomComponent"
-  }
- },
  {
   "pkg": "opnsense",
   "mod": "unbound",

@@ -68,9 +68,6 @@ func Provider() p.Provider {
 			infer.Resource[unbound.HostAliasOverride, unbound.HostAliasOverrideArgs, unbound.HostAliasOverrideState](),
 			infer.Resource[unbound.HostOverride, unbound.HostOverrideArgs, unbound.HostOverrideState](),
 		},
-		Components: []infer.InferredComponent{
-			infer.Component[*RandomComponent, RandomComponentArgs, *RandomComponentState](),
-		},
 		Config: infer.Config[config.Config](),
 		ModuleMap: map[tokens.ModuleName]tokens.ModuleName{
 			"provider": "index",
