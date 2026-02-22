@@ -1,18 +1,1 @@
-# Pulumi OPNsense Python Module
-
-This package provides Python resource bindings for the Pulumi OPNsense provider.
-
-Main resource namespace:
-
-- `pulumi_opnsense.unbound`
-
-Currently supported resources:
-
-- `HostOverride`
-- `HostAliasOverride`
-
-Provider configuration keys:
-
-- `opnsense:address`
-- `opnsense:key`
-- `opnsense:secret`
+The Pulumi OpnSense provider is used to interact with the resources supported by OpnSense.

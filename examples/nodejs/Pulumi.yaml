@@ -1,5 +1,12 @@
 name: provider-opnsense-native
 runtime: nodejs
+config:
+  opnsense:address:
+    value: asdf
+  opnsense:key:
+    value: key
+  opnsense:secret:
+    value: secret
 plugins:
   providers:
     - name: opnsense
