@@ -1,0 +1,4 @@
+[tools]
+dotnet = "8"
+go = "v1.26"
+golangci-lint = "v2.9.0"
