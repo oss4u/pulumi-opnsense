@@ -1,1 +1,13 @@
-The Pulumi OpnSense provider is used to interact with the resources supported by OpnSense.
+# Unbound Resources (.NET)
+
+This namespace contains .NET resources for managing OPNsense Unbound DNS overrides.
+
+Available resources:
+
+- `Pulumi.Opnsense.Unbound.HostOverride`
+- `Pulumi.Opnsense.Unbound.HostAliasOverride`
+
+These resources map to:
+
+- `opnsense:unbound:HostOverride`
+- `opnsense:unbound:HostAliasOverride`

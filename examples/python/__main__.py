@@ -1,8 +1,14 @@
 import pulumi
 import pulumi_opnsense as opnsense
 
-my_random_resource = opnsense.Random("myRandomResource", length=24)
-my_random_component = opnsense.RandomComponent("myRandomComponent", length=24)
+my_host_alias_override = opnsense.unbound.HostAliasOverride(
+    "myHostAliasOverride",
+    description="Pulumi test",
+    domain="example.com",
+    enabled=True,
+    host="host",
+    hostname="hostname",
+)
 pulumi.export("output", {
-    "value": my_random_resource.result,
+    "value": my_host_alias_override.result,
 })
