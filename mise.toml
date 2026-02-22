@@ -2,5 +2,4 @@
 dotnet = "8"
 go = "v1.26"
 golangci-lint = "v2.9.0"
-pulumictl = "0.0.50"
 pulumi = "latest"
