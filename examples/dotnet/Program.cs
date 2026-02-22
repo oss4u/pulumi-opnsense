@@ -1,25 +1,23 @@
 using System.Collections.Generic;
-using System.Linq;
 using Pulumi;
 using Opnsense = Pulumi.Opnsense;
 
 return await Deployment.RunAsync(() => 
 {
-    var myRandomResource = new Opnsense.Random("myRandomResource", new()
+    var myHostAliasOverride = new Opnsense.Unbound.HostAliasOverride("myHostAliasOverride", new()
     {
-        Length = 24,
-    });
-
-    var myRandomComponent = new Opnsense.RandomComponent("myRandomComponent", new()
-    {
-        Length = 24,
+        Description = "Pulumi test",
+        Domain = "example.com",
+        Enabled = true,
+        Host = "host",
+        Hostname = "hostname",
     });
 
     return new Dictionary<string, object?>
     {
-        ["output"] = 
+        ["output"] = new Dictionary<string, object?>
         {
-            { "value", myRandomResource.Result },
+            ["value"] = myHostAliasOverride.Result,
         },
     };
 });
