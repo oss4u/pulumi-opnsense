@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/oss4u/go-opnsense v0.2.2
+	github.com/oss4u/go-opnsense v0.2.3
 	github.com/pulumi/pulumi-go-provider v0.23.0
 	github.com/pulumi/pulumi-random/sdk/v4 v4.16.5
 	github.com/pulumi/pulumi/sdk/v3 v3.134.1
