@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Pulumi;
 using Opnsense = Pulumi.Opnsense;
 
@@ -20,7 +19,7 @@ return await Deployment.RunAsync(() =>
 
     return new Dictionary<string, object?>
     {
-        ["output"] = 
+        ["output"] = new Dictionary<string, object?>
         {
             { "value", myHostAliasOverride.Result },
         },

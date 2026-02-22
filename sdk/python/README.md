@@ -129,7 +129,7 @@ Release setup details are documented in [deployment-templates/README-DEPLOYMENT.
 - `PULUMI_IGNORE_AMBIENT_PLUGINS=true` is set in the `Makefile` to prefer local, pinned plugins.
 - Example config values in `examples/yaml` are placeholders and must be replaced with valid OPNsense API credentials.
 
-## References
+This SDK is generated from the provider schema. Regenerate SDKs from the repository root:
 
 - [Pulumi Go Provider](https://github.com/pulumi/pulumi-go-provider)
 - [Pulumi Provider Development](https://www.pulumi.com/docs/iac/extending-pulumi/)
