@@ -2,9 +2,9 @@ name: Build on Main and PR
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - develop
   pull_request:
     branches:
       - main
@@ -15,7 +15,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: docker://ghcr.io/pulumi/devcontainer:latest
+      image: jdxcode/mise:latest
+      #image: docker://ghcr.io/pulumi/devcontainer:latest
       options: --user root
     permissions:
       contents: read
