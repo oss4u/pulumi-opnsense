@@ -49,10 +49,10 @@ jobs:
         run: |
           set -ex
           make install
-#      - name: PulumiUp
+#      - name: Pulumi Up
 #        id: up
 #        run: make up
-#      - name: PulumiDown
+#      - name: Pulumi Down
 #        id: down
 #        run: make down
       - name: Generate multi-language examples from yaml IaC program
