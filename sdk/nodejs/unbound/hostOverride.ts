@@ -31,15 +31,15 @@ export class HostOverride extends pulumi.CustomResource {
         return obj['__pulumiType'] === HostOverride.__pulumiType;
     }
 
-    public readonly description!: pulumi.Output<string>;
-    public readonly domain!: pulumi.Output<string>;
-    public readonly enabled!: pulumi.Output<boolean>;
-    public readonly hostname!: pulumi.Output<string>;
-    public readonly mx!: pulumi.Output<string | undefined>;
-    public readonly mx_prio!: pulumi.Output<number | undefined>;
-    public /*out*/ readonly result!: pulumi.Output<string>;
-    public readonly rr!: pulumi.Output<string>;
-    public readonly server!: pulumi.Output<string | undefined>;
+    declare public readonly description: pulumi.Output<string>;
+    declare public readonly domain: pulumi.Output<string>;
+    declare public readonly enabled: pulumi.Output<boolean>;
+    declare public readonly hostname: pulumi.Output<string>;
+    declare public readonly mx: pulumi.Output<string | undefined>;
+    declare public readonly mx_prio: pulumi.Output<number | undefined>;
+    declare public /*out*/ readonly result: pulumi.Output<string>;
+    declare public readonly rr: pulumi.Output<string>;
+    declare public readonly server: pulumi.Output<string | undefined>;
 
     /**
      * Create a HostOverride resource with the given unique name, arguments, and options.
@@ -52,29 +52,29 @@ export class HostOverride extends pulumi.CustomResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (!opts.id) {
-            if ((!args || args.description === undefined) && !opts.urn) {
+            if (args?.description === undefined && !opts.urn) {
                 throw new Error("Missing required property 'description'");
             }
-            if ((!args || args.domain === undefined) && !opts.urn) {
+            if (args?.domain === undefined && !opts.urn) {
                 throw new Error("Missing required property 'domain'");
             }
-            if ((!args || args.enabled === undefined) && !opts.urn) {
+            if (args?.enabled === undefined && !opts.urn) {
                 throw new Error("Missing required property 'enabled'");
             }
-            if ((!args || args.hostname === undefined) && !opts.urn) {
+            if (args?.hostname === undefined && !opts.urn) {
                 throw new Error("Missing required property 'hostname'");
             }
-            if ((!args || args.rr === undefined) && !opts.urn) {
+            if (args?.rr === undefined && !opts.urn) {
                 throw new Error("Missing required property 'rr'");
             }
-            resourceInputs["description"] = args ? args.description : undefined;
-            resourceInputs["domain"] = args ? args.domain : undefined;
-            resourceInputs["enabled"] = args ? args.enabled : undefined;
-            resourceInputs["hostname"] = args ? args.hostname : undefined;
-            resourceInputs["mx"] = args ? args.mx : undefined;
-            resourceInputs["mx_prio"] = args ? args.mx_prio : undefined;
-            resourceInputs["rr"] = args ? args.rr : undefined;
-            resourceInputs["server"] = args ? args.server : undefined;
+            resourceInputs["description"] = args?.description;
+            resourceInputs["domain"] = args?.domain;
+            resourceInputs["enabled"] = args?.enabled;
+            resourceInputs["hostname"] = args?.hostname;
+            resourceInputs["mx"] = args?.mx;
+            resourceInputs["mx_prio"] = args?.mx_prio;
+            resourceInputs["rr"] = args?.rr;
+            resourceInputs["server"] = args?.server;
             resourceInputs["result"] = undefined /*out*/;
         } else {
             resourceInputs["description"] = undefined /*out*/;

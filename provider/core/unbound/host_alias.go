@@ -46,84 +46,102 @@ func (HostAliasOverride) GetApi(ctx context.Context) gooverrides.OverridesAliase
 	return gooverrides.GetAliasesOverrideApi(cfg.Api)
 }
 
-func (h HostAliasOverride) Create(ctx context.Context, name string, input HostAliasOverrideArgs, preview bool) (string, HostAliasOverrideState, error) {
-	state := HostAliasOverrideState{HostAliasOverrideArgs: input}
-	if preview {
-		return name, state, nil
+func (h HostAliasOverride) Create(ctx context.Context, req infer.CreateRequest[HostAliasOverrideArgs]) (infer.CreateResponse[HostAliasOverrideState], error) {
+	state := HostAliasOverrideState{HostAliasOverrideArgs: req.Inputs}
+	if req.DryRun {
+		return infer.CreateResponse[HostAliasOverrideState]{
+			ID:     req.Name,
+			Output: state,
+		}, nil
 	}
 	var err error
-	state.Id, err = h.createHostAlias(ctx, &input)
-	return state.Id, state, err
+	state.Id, err = h.createHostAlias(ctx, &req.Inputs)
+	return infer.CreateResponse[HostAliasOverrideState]{
+		ID:     state.Id,
+		Output: state,
+	}, err
 }
 
-func (h HostAliasOverride) Delete(ctx context.Context, id string, _ HostAliasOverrideState) error {
-	err := h.deleteHostAliasOverride(ctx, id)
-	return err
+func (h HostAliasOverride) Delete(ctx context.Context, req infer.DeleteRequest[HostAliasOverrideState]) (infer.DeleteResponse, error) {
+	err := h.deleteHostAliasOverride(ctx, req.ID)
+	return infer.DeleteResponse{}, err
 }
 
-func (h HostAliasOverride) Update(ctx context.Context, id string, _ HostAliasOverrideState, news HostAliasOverrideArgs, preview bool) (HostAliasOverrideState, error) {
-	if preview {
-		return HostAliasOverrideState{
-			HostAliasOverrideArgs: news,
+func (h HostAliasOverride) Update(ctx context.Context, req infer.UpdateRequest[HostAliasOverrideArgs, HostAliasOverrideState]) (infer.UpdateResponse[HostAliasOverrideState], error) {
+	if req.DryRun {
+		return infer.UpdateResponse[HostAliasOverrideState]{
+			Output: HostAliasOverrideState{
+				HostAliasOverrideArgs: req.Inputs,
+			},
 		}, nil
 	}
 	overrides := h.GetApi(ctx)
-	host := HostAliasOverrideArgsToOverridesAlias(&news)
-	host.Alias.Uuid = id
+	host := HostAliasOverrideArgsToOverridesAlias(&req.Inputs)
+	host.Alias.Uuid = req.ID
 	_, err := overrides.Update(&host)
-	return HostAliasOverrideState{
-		HostAliasOverrideArgs: news,
+	return infer.UpdateResponse[HostAliasOverrideState]{
+		Output: HostAliasOverrideState{
+			HostAliasOverrideArgs: req.Inputs,
+			Id:                    req.ID,
+		},
 	}, err
 }
 
-func (h HostAliasOverride) Read(ctx context.Context, id string, inputs HostAliasOverrideArgs, _ HostAliasOverrideState) (canonicalID string, normalizedInputs HostAliasOverrideArgs, normalizedState HostAliasOverrideState, err error) {
+func (h HostAliasOverride) Read(ctx context.Context, req infer.ReadRequest[HostAliasOverrideArgs, HostAliasOverrideState]) (infer.ReadResponse[HostAliasOverrideArgs, HostAliasOverrideState], error) {
 	overrides := h.GetApi(ctx)
-	host, err := overrides.Read(id)
+	host, err := overrides.Read(req.ID)
+	if err != nil {
+		return infer.ReadResponse[HostAliasOverrideArgs, HostAliasOverrideState]{}, err
+	}
 	newArgs := OverridesAliasToHostAliasOverrideArgs(host)
-	return id, inputs, HostAliasOverrideState{
+	return infer.ReadResponse[HostAliasOverrideArgs, HostAliasOverrideState]{
+		ID:     req.ID,
+		Inputs: req.Inputs,
+		State: HostAliasOverrideState{
 		HostAliasOverrideArgs: newArgs,
-		Id:                    id,
-	}, err
+			Id:                    req.ID,
+		},
+	}, nil
 }
 
-func (h HostAliasOverride) Diff(ctx context.Context, id string, _ HostAliasOverrideState, new HostAliasOverrideArgs) (p.DiffResponse, error) {
+func (h HostAliasOverride) Diff(ctx context.Context, req infer.DiffRequest[HostAliasOverrideArgs, HostAliasOverrideState]) (infer.DiffResponse, error) {
 	overrides := h.GetApi(ctx)
-	result, err := overrides.Read(id)
+	result, err := overrides.Read(req.ID)
 	details := result.Alias
 	if result == nil || details.Host == "" {
-		return p.DiffResponse{
+		return infer.DiffResponse{
 			DeleteBeforeReplace: true,
 			HasChanges:          true,
 			DetailedDiff:        nil,
 		}, err
 	}
 	diffs := map[string]p.PropertyDiff{}
-	if details.Enabled.Bool() != *new.Enabled {
+	if details.Enabled.Bool() != *req.Inputs.Enabled {
 		diffs["enabled"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	if details.Hostname != *new.Hostname {
+	if details.Hostname != *req.Inputs.Hostname {
 		diffs["hostname"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	if details.Host != *new.Host {
+	if details.Host != *req.Inputs.Host {
 		diffs["host"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	if details.Domain != *new.Domain {
+	if details.Domain != *req.Inputs.Domain {
 		diffs["domain"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	if details.Description != *new.Description {
+	if details.Description != *req.Inputs.Description {
 		diffs["description"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	diff := p.DiffResponse{
+	diff := infer.DiffResponse{
 		DeleteBeforeReplace: false,
 		HasChanges:          len(diffs) > 0,
 		DetailedDiff:        diffs,

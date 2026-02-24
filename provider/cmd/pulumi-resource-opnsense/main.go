@@ -15,6 +15,7 @@
 package main
 
 import (
+	"context"
 	"strings"
 
 	p "github.com/pulumi/pulumi-go-provider"
@@ -25,5 +26,7 @@ import (
 // Serve the provider against Pulumi's Provider protocol.
 func main() {
 	version := strings.TrimPrefix(opnsense.Version, "v")
-	p.RunProvider(opnsense.Name, version, opnsense.Provider())
+	if err := p.RunProvider(context.Background(), opnsense.Name, version, opnsense.Provider()); err != nil {
+		panic(err)
+	}
 }
