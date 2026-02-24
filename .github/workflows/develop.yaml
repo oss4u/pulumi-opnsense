@@ -15,8 +15,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: jdxcode/mise:latest
-      #image: docker://ghcr.io/pulumi/devcontainer:latest
+      # image: jdxcode/mise:latest
+      image: docker://ghcr.io/pulumi/devcontainer:latest
       options: --user root
     permissions:
       contents: read
