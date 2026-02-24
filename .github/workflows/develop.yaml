@@ -1,4 +1,4 @@
-name: Build on Main and PR
+name: Build on Develop and PR
 
 on:
   workflow_dispatch:
