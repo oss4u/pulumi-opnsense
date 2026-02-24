@@ -48,3 +48,6 @@ sdk/python/venv
 coverage.txt
 go/
 Library/
+sdk/nodejs/.pnp.cjs
+sdk/nodejs/.pnp.loader.mjs
+sdk/nodejs/.yarn/
