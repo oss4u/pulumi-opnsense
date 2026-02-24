@@ -1,5 +1,9 @@
 [tools]
-dotnet = "8"
 go = "v1.26"
 golangci-lint = "v2.9.0"
+node = "22"
+yarn = "latest"
+python = "3.12"
 pulumi = "latest"
+dotnet = "9"
+"go:github.com/pulumi/pulumictl/cmd/pulumictl" = { version = "v0.0.50" }

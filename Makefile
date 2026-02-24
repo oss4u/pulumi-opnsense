@@ -184,8 +184,8 @@ install_go_sdk::
 	#target intentionally blank
 
 install_nodejs_sdk::
-	-yarn unlink --cwd $(WORKING_DIR)/sdk/nodejs/bin
-	yarn link --cwd $(WORKING_DIR)/sdk/nodejs/bin
+	-yarn --cwd $(WORKING_DIR)/sdk/nodejs/bin unlink
+	yarn --cwd $(WORKING_DIR)/sdk/nodejs/bin link
 
 
 $(PULUMI): HOME := $(WORKING_DIR)

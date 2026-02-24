@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulumi.Opnsense", "sdk\dotn
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{90B6853E-7574-4DC5-A337-81DAFF6FC9BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "provider-xyz-native", "examples\dotnet\provider-xyz-native.csproj", "{3C6F2593-01FD-4186-92C3-8CFC94C69326}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "provider-xyz-native", "examples\dotnet\provider-opnsense-native.csproj", "{3C6F2593-01FD-4186-92C3-8CFC94C69326}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
