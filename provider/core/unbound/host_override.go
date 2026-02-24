@@ -25,6 +25,7 @@ type HostOverrideArgs struct {
 var _ = (infer.CustomRead[HostOverrideArgs, HostOverrideState])((*HostOverride)(nil))
 var _ = (infer.CustomUpdate[HostOverrideArgs, HostOverrideState])((*HostOverride)(nil))
 var _ = (infer.CustomDelete[HostOverrideState])((*HostOverride)(nil))
+var _ = (infer.CustomDiff[HostOverrideArgs, HostOverrideState])((*HostOverride)(nil))
 
 type HostOverrideState struct {
 	// It is generally a good idea to embed args in outputs, but it isn't strictly necessary.
@@ -39,97 +40,115 @@ func (HostOverride) GetApi(ctx context.Context) gooverrides.OverridesHostsApi {
 	return gooverrides.GetHostsOverrideApi(cfg.Api)
 }
 
-func (h HostOverride) Create(ctx context.Context, name string, input HostOverrideArgs, preview bool) (string, HostOverrideState, error) {
-	state := HostOverrideState{HostOverrideArgs: input}
-	if preview {
-		return name, state, nil
+func (h HostOverride) Create(ctx context.Context, req infer.CreateRequest[HostOverrideArgs]) (infer.CreateResponse[HostOverrideState], error) {
+	state := HostOverrideState{HostOverrideArgs: req.Inputs}
+	if req.DryRun {
+		return infer.CreateResponse[HostOverrideState]{
+			ID:     req.Name,
+			Output: state,
+		}, nil
 	}
 	var err error
-	state.Id, err = h.createHostOverride(ctx, &input)
-	return state.Id, state, err
+	state.Id, err = h.createHostOverride(ctx, &req.Inputs)
+	return infer.CreateResponse[HostOverrideState]{
+		ID:     state.Id,
+		Output: state,
+	}, err
 }
 
-func (h HostOverride) Delete(ctx context.Context, id string, _ HostOverrideState) error {
-	err := h.deleteHostOverride(ctx, id)
-	return err
+func (h HostOverride) Delete(ctx context.Context, req infer.DeleteRequest[HostOverrideState]) (infer.DeleteResponse, error) {
+	err := h.deleteHostOverride(ctx, req.ID)
+	return infer.DeleteResponse{}, err
 }
 
-func (h HostOverride) Update(ctx context.Context, id string, _ HostOverrideState, news HostOverrideArgs, preview bool) (HostOverrideState, error) {
-	if preview {
-		return HostOverrideState{
-			HostOverrideArgs: news,
+func (h HostOverride) Update(ctx context.Context, req infer.UpdateRequest[HostOverrideArgs, HostOverrideState]) (infer.UpdateResponse[HostOverrideState], error) {
+	if req.DryRun {
+		return infer.UpdateResponse[HostOverrideState]{
+			Output: HostOverrideState{
+				HostOverrideArgs: req.Inputs,
+			},
 		}, nil
 	}
 	overrides := h.GetApi(ctx)
-	host := HostOverrideArgsToOverridesHost(&news)
-	host.Host.Uuid = id
+	host := HostOverrideArgsToOverridesHost(&req.Inputs)
+	host.Host.Uuid = req.ID
 	_, err := overrides.Update(host)
-	return HostOverrideState{
-		HostOverrideArgs: news,
+	return infer.UpdateResponse[HostOverrideState]{
+		Output: HostOverrideState{
+			HostOverrideArgs: req.Inputs,
+			Id:               req.ID,
+		},
 	}, err
 }
 
-func (h HostOverride) Read(ctx context.Context, id string, inputs HostOverrideArgs, _ HostOverrideState) (canonicalID string, normalizedInputs HostOverrideArgs, normalizedState HostOverrideState, err error) {
+func (h HostOverride) Read(ctx context.Context, req infer.ReadRequest[HostOverrideArgs, HostOverrideState]) (infer.ReadResponse[HostOverrideArgs, HostOverrideState], error) {
 	overrides := h.GetApi(ctx)
-	host, err := overrides.Read(id)
+	host, err := overrides.Read(req.ID)
+	if err != nil {
+		return infer.ReadResponse[HostOverrideArgs, HostOverrideState]{}, err
+	}
 	newArgs := OverridesHostToHostOverrideArgs(host)
-	return id, inputs, HostOverrideState{
-		HostOverrideArgs: *newArgs,
-		Id:               id,
-	}, err
+	return infer.ReadResponse[HostOverrideArgs, HostOverrideState]{
+		ID:     req.ID,
+		Inputs: req.Inputs,
+		State: HostOverrideState{
+			HostOverrideArgs: *newArgs,
+			Id:               req.ID,
+		},
+	}, nil
 }
 
-func (h HostOverride) Diff(ctx context.Context, id string, _ HostOverrideState, new HostOverrideArgs) (p.DiffResponse, error) {
+func (h HostOverride) Diff(ctx context.Context, req infer.DiffRequest[HostOverrideArgs, HostOverrideState]) (infer.DiffResponse, error) {
 	overrides := h.GetApi(ctx)
-	result, err := overrides.Read(id)
+	result, err := overrides.Read(req.ID)
 	if result == nil || result.Host.Hostname == "" {
-		return p.DiffResponse{
+		return infer.DiffResponse{
 			DeleteBeforeReplace: true,
 			HasChanges:          true,
 			DetailedDiff:        nil,
 		}, err
 	}
 	diffs := map[string]p.PropertyDiff{}
-	if result.Host.Hostname != *new.Hostname {
+	if result.Host.Hostname != *req.Inputs.Hostname {
 		diffs["hostname"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	if result.Host.Domain != *new.Domain {
+	if result.Host.Domain != *req.Inputs.Domain {
 		diffs["domain"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	if result.Host.Description != *new.Description {
+	if result.Host.Description != *req.Inputs.Description {
 		diffs["description"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
-	if result.Host.Enabled.Bool() != *new.Enabled {
+	if result.Host.Enabled.Bool() != *req.Inputs.Enabled {
 		diffs["enabled"] = p.PropertyDiff{
 			Kind: p.Update,
 		}
 	}
 	if result.Host.Rr.String() == "A" {
-		if result.Host.Server != *new.Server {
+		if result.Host.Server != *req.Inputs.Server {
 			diffs["server"] = p.PropertyDiff{
 				Kind: p.Update,
 			}
 		}
 	} else if result.Host.Rr.String() == "MX" {
-		if result.Host.Mx != *new.Mx {
+		if result.Host.Mx != *req.Inputs.Mx {
 			diffs["mx"] = p.PropertyDiff{
 				Kind: p.Update,
 			}
 		}
-		if result.Host.Mxprio.Int() != *new.MxPrio {
+		if result.Host.Mxprio.Int() != *req.Inputs.MxPrio {
 			diffs["mxprio"] = p.PropertyDiff{
 				Kind: p.Update,
 			}
 		}
 
 	}
-	diff := p.DiffResponse{
+	diff := infer.DiffResponse{
 		DeleteBeforeReplace: false,
 		HasChanges:          len(diffs) > 0,
 		DetailedDiff:        diffs,

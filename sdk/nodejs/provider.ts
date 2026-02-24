@@ -22,15 +22,15 @@ export class Provider extends pulumi.ProviderResource {
     /**
      * The address of the fw. (without /api)
      */
-    public readonly address!: pulumi.Output<string>;
+    declare public readonly address: pulumi.Output<string>;
     /**
      * The key to access the api of the fw.
      */
-    public readonly key!: pulumi.Output<string>;
+    declare public readonly key: pulumi.Output<string>;
     /**
      * The secret to access the api of the fw.
      */
-    public readonly secret!: pulumi.Output<string>;
+    declare public readonly secret: pulumi.Output<string>;
 
     /**
      * Create a Provider resource with the given unique name, arguments, and options.
@@ -43,13 +43,13 @@ export class Provider extends pulumi.ProviderResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         {
-            if ((!args || args.address === undefined) && !opts.urn) {
+            if (args?.address === undefined && !opts.urn) {
                 throw new Error("Missing required property 'address'");
             }
-            if ((!args || args.key === undefined) && !opts.urn) {
+            if (args?.key === undefined && !opts.urn) {
                 throw new Error("Missing required property 'key'");
             }
-            if ((!args || args.secret === undefined) && !opts.urn) {
+            if (args?.secret === undefined && !opts.urn) {
                 throw new Error("Missing required property 'secret'");
             }
             resourceInputs["address"] = args?.address ? pulumi.secret(args.address) : undefined;

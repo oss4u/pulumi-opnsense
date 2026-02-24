@@ -11,9 +11,6 @@
   "repository": "https://github.com/oss4u/pulumi-opnsense",
   "pluginDownloadURL": "github://api.github.com/oss4u/pulumi-opnsense",
   "publisher": "oss4u",
-  "meta": {
-    "moduleFormat": "(.*)"
-  },
   "language": {
     "csharp": {
       "packageReferences": {
@@ -79,7 +76,6 @@
         "secret": true
       }
     },
-    "type": "object",
     "required": [
       "address",
       "key",
@@ -130,13 +126,12 @@
           "type": "string"
         }
       },
-      "type": "object",
       "required": [
-        "description",
-        "domain",
         "enabled",
         "host",
         "hostname",
+        "domain",
+        "description",
         "result"
       ],
       "inputProperties": {
@@ -157,11 +152,11 @@
         }
       },
       "requiredInputs": [
-        "description",
-        "domain",
         "enabled",
         "host",
-        "hostname"
+        "hostname",
+        "domain",
+        "description"
       ]
     },
     "opnsense:unbound:HostOverride": {
@@ -194,14 +189,13 @@
           "type": "string"
         }
       },
-      "type": "object",
       "required": [
-        "description",
-        "domain",
         "enabled",
         "hostname",
-        "result",
-        "rr"
+        "domain",
+        "rr",
+        "description",
+        "result"
       ],
       "inputProperties": {
         "description": {
@@ -230,11 +224,11 @@
         }
       },
       "requiredInputs": [
-        "description",
-        "domain",
         "enabled",
         "hostname",
-        "rr"
+        "domain",
+        "rr",
+        "description"
       ]
     }
   }
