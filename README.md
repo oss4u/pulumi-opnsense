@@ -80,6 +80,14 @@ Run lint for provider code:
 make lint
 ```
 
+Install and run pre-commit hooks:
+
+```bash
+pipx install pre-commit
+make pre-commit-install
+make pre-commit-run
+```
+
 Run provider tests:
 
 ```bash

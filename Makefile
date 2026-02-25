@@ -79,6 +79,10 @@ sdk/dotnet: $(SCHEMA_FILE)
 provider:
 	cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION_GENERIC}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER)
 
+.PHONY: provider_guard
+provider_guard:
+	cd provider && go test -count=1 ./...
+
 .PHONY: provider_debug
 provider_debug:
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -gcflags="all=-N -l" -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION_GENERIC}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
@@ -149,7 +153,7 @@ devcontainer::
 	cp -f .devcontainer/devcontainer.json .devcontainer.json
 
 .PHONY: build
-build:: provider build_sdks
+build:: provider_guard provider build_sdks
 
 .PHONY: build_sdks
 build_sdks: dotnet_sdk go_sdk nodejs_sdk python_sdk 
@@ -159,6 +163,13 @@ only_build:: build
 
 lint:
 	cd provider && golangci-lint --path-prefix provider --config ../.golangci.yml run
+
+pre-commit-install:
+	pre-commit install
+	pre-commit install --hook-type commit-msg
+
+pre-commit-run:
+	pre-commit run --all-files
 
 install:: install_nodejs_sdk install_dotnet_sdk
 	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
