@@ -3,6 +3,7 @@ package unbound
 import (
 	"context"
 
+	"github.com/oss4u/go-opnsense/opnsense"
 	gooverrides "github.com/oss4u/go-opnsense/opnsense/core/unbound/overrides"
 	"github.com/oss4u/pulumi-opnsense/provider/core/config"
 	p "github.com/pulumi/pulumi-go-provider"
@@ -37,6 +38,9 @@ type HostOverrideState struct {
 
 func (HostOverride) GetApi(ctx context.Context) gooverrides.OverridesHostsApi {
 	cfg := infer.GetConfig[config.Config](ctx)
+	if cfg.Api == nil {
+		cfg.Api = opnsense.GetOpnSenseClient(cfg.Address, cfg.Key, cfg.Secret)
+	}
 
 	return gooverrides.GetHostsOverrideApi(cfg.Api)
 }

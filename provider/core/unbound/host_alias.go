@@ -3,6 +3,7 @@ package unbound
 import (
 	"context"
 
+	"github.com/oss4u/go-opnsense/opnsense"
 	gooverrides "github.com/oss4u/go-opnsense/opnsense/core/unbound/overrides"
 	"github.com/oss4u/pulumi-opnsense/provider/core/config"
 	p "github.com/pulumi/pulumi-go-provider"
@@ -43,6 +44,9 @@ type HostAliasOverrideState struct {
 
 func (HostAliasOverride) GetApi(ctx context.Context) gooverrides.OverridesAliasesApi {
 	cfg := infer.GetConfig[config.Config](ctx)
+	if cfg.Api == nil {
+		cfg.Api = opnsense.GetOpnSenseClient(cfg.Address, cfg.Key, cfg.Secret)
+	}
 
 	return gooverrides.GetAliasesOverrideApi(cfg.Api)
 }
@@ -99,7 +103,7 @@ func (h HostAliasOverride) Read(ctx context.Context, req infer.ReadRequest[HostA
 		ID:     req.ID,
 		Inputs: req.Inputs,
 		State: HostAliasOverrideState{
-		HostAliasOverrideArgs: newArgs,
+			HostAliasOverrideArgs: newArgs,
 			Id:                    req.ID,
 		},
 	}, nil

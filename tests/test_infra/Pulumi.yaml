@@ -1,0 +1,53 @@
+name: hetzner-fw-with-cloudflare
+runtime:
+  name: python
+  options:
+    virtualenv: .venv
+description: Create a Hetzner Cloud server and bind fw.test.sys-int.de in Cloudflare
+
+config:
+  cloudflareZoneName:
+    type: string
+    default: sys-int.de
+    description: Cloudflare zone name
+  fqdn:
+    type: string
+    default: fw.test.sys-int.de
+    description: FQDN to create/update in Cloudflare
+  hcloudToken:
+    type: string
+    secret: true
+    description: Hetzner Cloud API token
+  cloudflareApiToken:
+    type: string
+    secret: true
+    description: Cloudflare API token
+  serverName:
+    type: string
+    default: fw-test-sys-int
+  serverType:
+    type: string
+    default: cx23
+  snapshotNamePrefix:
+    type: string
+    default: opnsense-
+    description: Prefix for snapshot names in format opnsense-<yyyymmdd-hhss>
+  snapshotIdOverride:
+    type: string
+    default: ""
+    description: Optional explicit Hetzner snapshot image ID to use instead of name-based auto-selection
+  location:
+    type: string
+    default: ""
+    description: Optional Hetzner location (leave empty for automatic placement)
+  sshKeyIds:
+    type: array
+    items:
+      type: string
+    default: []
+  dnsTtl:
+    type: integer
+    default: 120
+  proxied:
+    type: boolean
+    default: false
