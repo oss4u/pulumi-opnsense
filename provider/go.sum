@@ -157,8 +157,8 @@ github.com/opentracing/basictracer-go v1.1.0/go.mod h1:V2HZueSJEp879yv285Aap1BS6
 github.com/opentracing/opentracing-go v1.1.0/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
 github.com/opentracing/opentracing-go v1.2.0 h1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=
 github.com/opentracing/opentracing-go v1.2.0/go.mod h1:GxEUsuufX4nBwe+T+Wl9TAgYrxe9dPLANfrWvHYVTgc=
-github.com/oss4u/go-opnsense v0.2.3 h1:ECvavvdGn9whVM8gJqsj4c6TJG+Joe/u/jsWVKEkxN0=
-github.com/oss4u/go-opnsense v0.2.3/go.mod h1:eLlNsGVjdms7mUJxhazOc6mPbiZEkteiHrBafGehKZA=
+github.com/oss4u/go-opnsense v0.4.2 h1:f/YV4pH+pLasMUu/y7xe8mZ6x1FjmUFzoaYqVmcl+vs=
+github.com/oss4u/go-opnsense v0.4.2/go.mod h1:5UuagYKuwr762di5r50cbcLVj7BeKrZ88vYLaYNUzss=
 github.com/pgavlin/fx v0.1.6 h1:r9jEg69DhNoCd3Xh0+5mIbdbS3PqWrVWujkY76MFRTU=
 github.com/pgavlin/fx v0.1.6/go.mod h1:KWZJ6fqBBSh8GxHYqwYCf3rYE7Gp2p0N8tJp8xv9u9M=
 github.com/pgavlin/fx/v2 v2.0.12 h1:SjjaJ68Dt8Z4zHwOpY/RPijd7lShs6xYupJbF9ra00M=
