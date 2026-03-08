@@ -14,6 +14,9 @@ inputs:
         dotnet
         java
     default: all
+  python-version:
+    description: Python version for actions/setup-python.
+    default: '3.14'
 
 runs:
   using: "composite"
@@ -64,7 +67,7 @@ runs:
       if: inputs.tools == 'all' || contains(inputs.tools, 'python')
       uses: actions/setup-python@v5
       with:
-        python-version: '3.14'
+        python-version: ${{ inputs.python-version }}
 
     - name: Setup Java
       if: inputs.tools == 'all' || contains(inputs.tools, 'java')

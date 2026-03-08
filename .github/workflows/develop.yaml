@@ -41,6 +41,7 @@ jobs:
         uses: ./.github/actions/setup-tools
         with:
           tools: go, pulumicli, pulumictl, nodejs, python, dotnet
+          python-version: '3.12.10'
       - name: Provider guard
         id: provider_guard
         run: |
