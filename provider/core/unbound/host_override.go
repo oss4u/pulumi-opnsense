@@ -2,6 +2,9 @@ package unbound
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"strings"
 
 	"github.com/oss4u/go-opnsense/opnsense"
 	gooverrides "github.com/oss4u/go-opnsense/opnsense/core/unbound/overrides"
@@ -174,5 +177,70 @@ func (h HostOverride) createHostOverride(ctx context.Context, args *HostOverride
 	if err != nil {
 		return "", err
 	}
-	return createdHost.Host.GetUUID(), err
+
+	if createdHost != nil {
+		if id := strings.TrimSpace(createdHost.Host.GetUUID()); id != "" {
+			return id, nil
+		}
+	}
+
+	resolvedID, resolveErr := h.findHostOverrideUUIDByHostDomain(ctx, *args.Hostname, *args.Domain)
+	if resolveErr != nil {
+		return "", resolveErr
+	}
+	if resolvedID == "" {
+		return "", fmt.Errorf("host override was created but no uuid was returned for %s.%s", *args.Hostname, *args.Domain)
+	}
+
+	return resolvedID, nil
+}
+
+func (h HostOverride) findHostOverrideUUIDByHostDomain(ctx context.Context, hostname, domain string) (string, error) {
+	cfg := infer.GetConfig[config.Config](ctx)
+	if cfg.Api == nil {
+		cfg.Api = opnsense.GetOpnSenseClient(cfg.Address, cfg.Key, cfg.Secret)
+	}
+
+	searchPayload := map[string]any{
+		"current":  1,
+		"rowCount": 500,
+	}
+
+	payloadRaw, err := json.Marshal(searchPayload)
+	if err != nil {
+		return "", err
+	}
+
+	raw, err := cfg.Api.ModifyingRequest("unbound", "settings", "search_host_override", string(payloadRaw), []string{})
+	if err != nil {
+		return "", err
+	}
+
+	var decoded map[string]any
+	if err := json.Unmarshal([]byte(raw), &decoded); err != nil {
+		return "", err
+	}
+
+	rows, ok := decoded["rows"].([]any)
+	if !ok {
+		return "", nil
+	}
+
+	for _, row := range rows {
+		rowMap, ok := row.(map[string]any)
+		if !ok {
+			continue
+		}
+
+		candidateHost, _ := rowMap["hostname"].(string)
+		candidateDomain, _ := rowMap["domain"].(string)
+		uuid, _ := rowMap["uuid"].(string)
+
+		if strings.EqualFold(strings.TrimSpace(candidateHost), strings.TrimSpace(hostname)) &&
+			strings.EqualFold(strings.TrimSpace(candidateDomain), strings.TrimSpace(domain)) {
+			return strings.TrimSpace(uuid), nil
+		}
+	}
+
+	return "", nil
 }
